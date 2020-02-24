@@ -1,5 +1,5 @@
-flask-app
+## flask-app
 
 
-# Set URI
+### Set URI
 export DATABASE_URI="mysql+pymysql://[USERNAME]:[PASSWORD]@[HOST]/[DATABASE NAME]"
