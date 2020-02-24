@@ -9,6 +9,11 @@ from application import app, db
 from application.models import Posts
 from application.forms import PostForm
 
+@app.route('/posts')
+def posts():
+    allposts = Posts.query.all()    
+    return render_template('posts.html', title='posts',posts = allposts)
+
 @app.route('/post', methods=['GET', 'POST'])
 def post():
     form = PostForm()
