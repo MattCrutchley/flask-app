@@ -9,19 +9,19 @@ class PostForm(FlaskForm):
             Length(min=2, max=30)
         ]
     )
-    last_name = StringField('First Name',
+    last_name = StringField('last Name',
         validators = [
             Required(),
             Length(min=2, max=30)
         ]
     )
-    title = StringField('First Name',
+    title = StringField('Title',
         validators = [
             Required(),
             Length(min=2, max=100)
         ]
     )
-    content = StringField('First Name',
+    content = StringField('Content',
         validators = [
             Required(),
             Length(min=2, max=1000)
