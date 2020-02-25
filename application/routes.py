@@ -12,7 +12,7 @@ from application.forms import PostForm
 @app.route('/posts')
 def posts():
     allposts = Posts.query.all()    
-    return render_template('posts.html', title='posts',posts = allposts)
+    return render_template('posts.html', title='Posts',posts=allposts)
 
 @app.route('/post', methods=['GET', 'POST'])
 def post():
@@ -39,16 +39,16 @@ def post():
 @app.route('/home')
 def home():
     postData = Posts.query.first()
-    return render_template('home.html', title='home',posts = postData)
+    return render_template('home.html', title='Home',posts = postData)
 
 @app.route('/register')
 def register():
-    return render_template('register.html', title ='register')
+    return render_template('register.html', title ='Register')
 
 @app.route('/about')
 def about():
-    return render_template('about.html', title ='about')
+    return render_template('about.html', title ='About')
 
 @app.route('/login')
 def login():
-    return render_template('login.html', title ='login')
+    return render_template('login.html', title ='Login')
