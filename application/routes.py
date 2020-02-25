@@ -2,12 +2,12 @@
 from flask import render_template
  # import the app object from the ./application/__init__.py
 from application import app
-from application.models import Posts
+from application.models import Posts, Users
  # define routes for / & /home, this function will be called when these are accessed
 from flask import render_template, redirect, url_for
-from application import app, db
+from application import app, db, bcrypt
 from application.models import Posts
-from application.forms import PostForm
+from application.forms import PostForm, RegistrationForm
 
 @app.route('/posts')
 def posts():
@@ -41,9 +41,19 @@ def home():
     postData = Posts.query.first()
     return render_template('home.html', title='Home',posts = postData)
 
-@app.route('/register')
+@app.route('/register',methods=['GET','POST'])
 def register():
-    return render_template('register.html', title ='Register')
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hash_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+
+        user = Users(email=form.email.data, password=hash_pw)
+    
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('post'))
+    
+    return render_template('register.html', title ='Register',form=form)
 
 @app.route('/about')
 def about():
