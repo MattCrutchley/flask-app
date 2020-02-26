@@ -32,6 +32,20 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post!')   
 
 class RegistrationForm(FlaskForm):
+
+    first_name = StringField('First Name',
+        validators = [
+            Required(),
+            Length(min=2, max=30)
+        ]
+    )
+    last_name = StringField('last Name',
+        validators = [
+            Required(),
+            Length(min=2, max=30)
+        ]
+    )
+
     email = StringField('Email',
         validators = [
            Required(),
