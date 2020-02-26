@@ -4,12 +4,15 @@
 </head>
 <body>
 	<div>
-	<a href="{{ url_for('home') }}">Home</a>
-	<a href="{{ url_for('register') }}">Register</a>
-	<a href="{{ url_for('login') }}">Login</a>
 	<a href="{{ url_for('about') }}">About</a>
+	{% if current_user.is_authenticated %}
 	<a href="{{ url_for('post') }}">Post</a>
 	<a href="{{ url_for('posts') }}">Posts</a>
+	<a href="{{ url_for('home') }}">Home</a>
+	{% else %}
+	 <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+	{% endif %}
 	</div>
 	</div>
 <h1>{{  title  }} Page</h1>
