@@ -12,7 +12,7 @@ class Posts(db.Model):
 
     def __repr__(self):
         return ''.join([
-            'User: ', self.user_id, '\r\n',
+            'User: ', str(self.user_id), '\r\n',
             'Title: ', self.title, '\r\n', self.content
             ])
 
@@ -23,8 +23,9 @@ def load_user(id):
 
 class Users(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(500), nullable=False, unique=True)
-    password = db.Column(db.String(500), nullable=False)
+    first_name = db.Column(db.String(30), nullable=False)
+    last_name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String(500), nullable=False)
     posts = db.relationship('Posts', backref='author', lazy=True)
 
@@ -33,4 +34,4 @@ class Users(db.Model,UserMixin):
             'User ID: ', str(self.id), '\r\n',
             'Email: ', self.email, '\r\n',
             'Name: ', self.first_name, ' ', self.last_name
-        ])    
+        ])

@@ -5,13 +5,8 @@ from application.models import Posts, Users
 from flask import render_template, redirect, url_for, request
 from application import app, db, bcrypt
 from application.models import Posts
-from application.forms import PostForm, RegistrationForm, LoginForm
+from application.forms import PostForm, RegistrationForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
-
-@app.route('/posts')
-def posts():
-    allposts = Posts.query.all()    
-    return render_template('posts.html', title='Posts',posts=allposts)
 
 @app.route('/post', methods=['GET', 'POST'])
 @login_required
@@ -38,10 +33,10 @@ def post():
 @app.route('/home')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('register'))
-    else:
-        postData = Posts.query.first()
+        postData = Posts.query.all()
         return render_template('home.html', title='Home',posts = postData)
+    else:
+        return redirect(url_for('register'))
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -49,14 +44,10 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hash_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hash_pw = bcrypt.generate_password_hash(form.password.data)
 
-        user = Users(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            email=form.email.data,
-            password=hashed_pw
-        )    
+        user = Users(email=form.email.data,first_name = form.first_name.data,last_name = form.last_name.data, password=hash_pw)
+
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('post'))
@@ -87,3 +78,33 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.first_name.data = current_user.first_name
+        form.last_name.data = current_user.last_name
+        form.email.data = current_user.email
+    return render_template('account.html', title='Account', form=form)
+
+
+@app.route("/account/delete", methods=["GET", "POST"])
+@login_required
+def account_delete():
+    user = current_user.id
+    account = Users.query.filter_by(id=user).first()
+    logout_user()
+    user_posts = Posts.query.filter_by(user_id=user).all()
+    for post in user_posts:
+        db.session.delete(post)
+    db.session.delete(account)
+    db.session.commit()
+    return redirect(url_for('register'))
