@@ -12,7 +12,7 @@ class TestBase(TestCase):
         # pass in configurations for test database
         config_name = 'testing'
         app.config.update(
-                SQLALCHEMY_DATABASE_URI='mysql+pymysql://matt2:password@127.0.0.1/testdb')
+                SQLALCHEMY_DATABASE_URI=
         return app
 
     def setUp(self):
